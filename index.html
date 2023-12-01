@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Display a satellite map</title>
+    <meta property="og:description" content="Display a satellite raster baselayer." />
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='maplibre-gl.css' />
+    <script src='maplibre-gl.js'></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map',
+            zoom: 9,
+            center: [137.9150899566626, 36.25956997955441],
+            style:
+                'https://api.maptiler.com/maps/hybrid/style.json?key=x4PkWnbJomR3gQAHHEce',
+            showTileBoundaries: true
+        });
+
+        map.on('load', () => {
+            // NASA GIBS WMS Black Marble (VIIRS, SNPP) ソース
+            map.addSource("nasa-gibs-black-marble", {
+                'type': 'raster',
+                'tiles': [
+                    'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=VIIRS_Black_Marble&STYLES=&FORMAT=image/png&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256'
+                ],
+                attribution: '<a href="https://earthdata.nasa.gov/" target="_blank">NASA Earthdata</a>',
+                'tileSize': 256
+            });
+
+            // NASA GIBS WMS Black Marble (VIIRS, SNPP) レイヤ
+            map.addLayer({
+                'id': 'nasa-gibs-black-marble-layer',
+                'type': 'raster',
+                'source': 'nasa-gibs-black-marble',
+                'paint': {
+                    'raster-opacity': 1
+                }
+            });
+
+        });
+    </script>
+</body>
+
+</html>
