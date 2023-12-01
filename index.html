@@ -27,12 +27,37 @@
     <script>
         const map = new maplibregl.Map({
             container: 'map',
-            zoom: 9,
-            center: [137.9150899566626, 36.25956997955441],
-            style:
-                'https://api.maptiler.com/maps/hybrid/style.json?key=x4PkWnbJomR3gQAHHEce',
+            zoom: 6.75,
+            hash: true,
+            pitch: 20,
+            bearing: 0,
+            maxPitch: 85,
+            center: [137.891, 35.712],
+            style: 'https://api.maptiler.com/maps/hybrid/style.json?key=3vP7xaDm3gASNdwulEW1',
             showTileBoundaries: true
         });
+
+        // ズーム・回転
+        map.addControl(new maplibregl.NavigationControl());
+
+        // フルスクリーンモードのオンオフ
+        map.addControl(new maplibregl.FullscreenControl());
+
+        // 現在位置表示
+        map.addControl(new maplibregl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: false
+            },
+            fitBoundsOptions: { maxZoom: 18 },
+            trackUserLocation: true,
+            showUserLocation: true
+        }));
+
+        // スケール表示
+        map.addControl(new maplibregl.ScaleControl({
+            maxWidth: 200,
+            unit: 'metric'
+        }));
 
         map.on('load', () => {
             // NASA GIBS WMS Black Marble (VIIRS, SNPP) ソース
@@ -41,7 +66,7 @@
                 'tiles': [
                     'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=VIIRS_Black_Marble&STYLES=&FORMAT=image/png&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256'
                 ],
-                attribution: '<a href="https://earthdata.nasa.gov/" target="_blank">NASA Earthdata</a>',
+                attribution: '<a href="https://www.earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" target="_blank">NASA Earthdata</a>',
                 'tileSize': 256
             });
 
